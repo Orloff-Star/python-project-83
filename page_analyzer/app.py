@@ -6,11 +6,11 @@ import os
 app = Flask(__name__)
 app.config['SECRET_KEY'] = os.getenv('a242752b0e9a71335718af7cbebfdd6d')
 
-'''@app.route('/')
+@app.route('/')
 def hello_world():
-    return 'Welcome to Flask!'''
+    return 'Welcome to Flask!'
 
 
-@app.get('/')
+'''@app.get('/')
 def page_analyzer():
-    return render_template('html/index.html')
+    return render_template('html/index.html')'''
