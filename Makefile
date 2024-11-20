@@ -5,7 +5,7 @@ lint:
 	poetry run flake8 page_analyzer
 
 build:
-	poetry build
+	./build.sh
 
 publish:
 	poetry publish --dry-run
