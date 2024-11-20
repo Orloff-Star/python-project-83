@@ -5,6 +5,7 @@ import os
 import psycopg2
 import validators
 from psycopg2.extras import NamedTupleCursor
+from datetime import datetime
 
 
 load_dotenv()
@@ -75,6 +76,22 @@ def to_urls():
                          ''')
             url_checks = cur.fetchall()
     return render_template('urls.html', urls=urls, url_checks=url_checks)
+
+
+@app.post('/urls/<id>/checks')
+def url_checks(id):
+    current_date = datetime.now()
+    with connection() as conn:
+        with conn.cursor(cursor_factory=NamedTupleCursor) as cur:
+            cur.execute('SELECT * FROM urls WHERE id=%s', (id,))
+            url_info = cur.fetchone()
+            cur.execute('INSERT INTO url_checks (url_id, created_at) VALUES (%s,%s)', (id, current_date,))
+            cur.execute('SELECT * FROM url_checks WHERE url_id=%s', (id,))
+
+    flash('Страница успешно проверена', 'success')
+    return redirect(url_for('url_id', id=id))
+
+
 
 def validate(url):
     errors = {}
