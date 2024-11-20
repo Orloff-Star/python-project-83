@@ -1,0 +1,6 @@
+__pycache__
+dist/
+*.pyc
+.venv/
+dist
+page_analyzer/.env
