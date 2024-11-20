@@ -4,6 +4,7 @@ from urllib.parse import urlparse
 import os
 import psycopg2
 import validators
+from psycopg2.extras import NamedTupleCursor
 
 
 load_dotenv()
@@ -46,7 +47,7 @@ def add_url():
             url_er=url_name
         ), 422
     parsed_url = urlparse(url_name)
-    valid_url = f"{parsed_url.scheme}://{parsed_url.netloc}"
+    valid_url = parsed_url.scheme + '://' + parsed_url.netloc
     with connection() as conn:
         with conn.cursor(cursor_factory=NamedTupleCursor) as cur:
             cur.execute('SELECT * FROM urls WHERE name=%s', (valid_url,))
@@ -54,13 +55,26 @@ def add_url():
             if cur_url:
                 flash('Страница уже существует', 'info')
                 return redirect(url_for('url_id', id=cur_url.id), code=302)
-            cur.execute('INSERT INTO urls (name) VALUES (%s)', (valid_url))
+            cur.execute('INSERT INTO urls (name) VALUES (%s)', (valid_url,))
             cur.execute('SELECT * FROM urls WHERE name=%s', (valid_url,))
             cur_url = cur.fetchone()
             flash('Страница успешно добавлена', 'success')
             return redirect(url_for('url_id', id=cur_url.id))
 
-
+@app.get('/urls')
+def to_urls():
+    with connection() as conn:
+        with conn.cursor(cursor_factory=NamedTupleCursor) as cur:
+            cur.execute('SELECT * FROM urls')
+            urls = cur.fetchall()
+            cur.execute('''SELECT DISTINCT ON (url_id) url_id,
+                         MAX(created_at) AS created_at, 
+                         status_code 
+                         FROM url_checks
+                         GROUP BY url_id, status_code
+                         ''')
+            url_checks = cur.fetchall()
+    return render_template('urls.html', urls=urls, url_checks=url_checks)
 
 def validate(url):
     errors = {}
