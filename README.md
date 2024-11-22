@@ -2,21 +2,21 @@
 [![Actions Status](https://github.com/Orloff-Star/python-project-83/actions/workflows/hexlet-check.yml/badge.svg)](https://github.com/Orloff-Star/python-project-83/actions)
 
 
-#![Анализатор страниц](<https://python-project-83-4g3d.onrender.com>)
-Page Analyzer — это веб-приложение, которое производит анализ URL-адреса и предоставляет пользователю информацию о нём.
+## [Page Analyzer](https://python-project-83-4g3d.onrender.com "Go to the analyzer page")
+ — is a web application that parses a URL and provides information about it to the user.
 
-##Описание
-Приложение по запросу пользователя предосталяет информацию о сайте, такую как: заголовок, описание, код статуса и т. д. Приложение также хранит историю пользовательских запросов в базе данных SQL и предоставляет отдельную страницу для просмотра всех URL-адресов и истории их анализа.
+### Description
+The application, upon user request, provides information about the site, such as: title, description, status code, etc. The application also stores the history of user queries in an SQL database and provides a separate page to view all URLs and their analysis history.
 
-##Использование
-Введите URL в поле ввода и нажмите кнопку «Проверить».
-На странице URL нажмите кнопку «Запустить проверку», чтобы начать проверку.
-Результат смотрите ниже
-Перейдите на страницу «Сайты», чтобы увидеть список всех проанализированных URL-адресов.
-Нажмите на URL-адрес, чтобы просмотреть подробную историю его анализа.
+### Usage
+Enter the URL in the input field and click the "Check" button.
+On the URL page, click the "Run Test" button to begin the test.
+See the result below
+Go to the Sites page to see a list of all analyzed URLs.
+Click on a URL to view its detailed analysis history.
 
-##Используемые технологии
-Питон
-Flask (веб-фреймворк)
+### Technologies used
+Python
+Flask (Web framework)
 HTML
-SQL (База данных)
+SQL (Database)
