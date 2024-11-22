@@ -1,9 +1,22 @@
 ### Hexlet tests and linter status:
 [![Actions Status](https://github.com/Orloff-Star/python-project-83/actions/workflows/hexlet-check.yml/badge.svg)](https://github.com/Orloff-Star/python-project-83/actions)
 
-![example workflow](https://github.com/Orloff-Star/python-project-83/actions/workflows/project-check.yml/badge.svg)
 
+#![Анализатор страниц](<https://python-project-83-4g3d.onrender.com>)
+Page Analyzer — это веб-приложение, которое производит анализ URL-адреса и предоставляет пользователю информацию о нём.
 
+##Описание
+Приложение по запросу пользователя предосталяет информацию о сайте, такую как: заголовок, описание, код статуса и т. д. Приложение также хранит историю пользовательских запросов в базе данных SQL и предоставляет отдельную страницу для просмотра всех URL-адресов и истории их анализа.
 
-https://python-project-83-4g3d.onrender.com
+##Использование
+Введите URL в поле ввода и нажмите кнопку «Проверить».
+На странице URL нажмите кнопку «Запустить проверку», чтобы начать проверку.
+Результат смотрите ниже
+Перейдите на страницу «Сайты», чтобы увидеть список всех проанализированных URL-адресов.
+Нажмите на URL-адрес, чтобы просмотреть подробную историю его анализа.
 
+##Используемые технологии
+Питон
+Flask (веб-фреймворк)
+HTML
+SQL (База данных)

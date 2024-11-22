@@ -7,6 +7,7 @@ import validators
 from psycopg2.extras import NamedTupleCursor
 from datetime import datetime
 import requests
+from bs4 import BeautifulSoup
 
 
 load_dotenv()
@@ -31,9 +32,14 @@ def url_id(id):
         with conn.cursor(cursor_factory=NamedTupleCursor) as cur:
             cur.execute('SELECT * FROM urls WHERE id=%s', (id,))
             url_info = cur.fetchone()
+            cur.execute('SELECT * FROM url_checks WHERE url_id=%s', (id,))
+            url_checks = cur.fetchall()
+    if not url_info:
+        return 'URL отсутствует', 404
     return render_template(
         'url_id.html',
         url=url_info,
+        url_checks=url_checks,
     )
 
 
@@ -48,6 +54,7 @@ def add_url():
             'index.html',
             url_er=url_name
         ), 422
+    current_date = datetime.now()
     parsed_url = urlparse(url_name)
     valid_url = parsed_url.scheme + '://' + parsed_url.netloc
     with connection() as conn:
@@ -57,11 +64,13 @@ def add_url():
             if cur_url:
                 flash('Страница уже существует', 'info')
                 return redirect(url_for('url_id', id=cur_url.id), code=302)
-            cur.execute('INSERT INTO urls (name) VALUES (%s)', (valid_url,))
+            cur.execute('INSERT INTO urls (name, created_at) VALUES (%s,%s)',
+                        (valid_url, current_date,))
             cur.execute('SELECT * FROM urls WHERE name=%s', (valid_url,))
             cur_url = cur.fetchone()
             flash('Страница успешно добавлена', 'success')
             return redirect(url_for('url_id', id=cur_url.id))
+
 
 @app.get('/urls')
 def to_urls():
@@ -70,11 +79,11 @@ def to_urls():
             cur.execute('SELECT * FROM urls')
             urls = cur.fetchall()
             cur.execute('''SELECT DISTINCT ON (url_id) url_id,
-                         MAX(created_at) AS created_at, 
-                         status_code 
-                         FROM url_checks
-                         GROUP BY url_id, status_code
-                         ''')
+                        MAX(created_at) AS created_at,
+                        status_code
+                        FROM url_checks
+                        GROUP BY url_id, status_code
+                        ''')
             url_checks = cur.fetchall()
     return render_template('urls.html', urls=urls, url_checks=url_checks)
 
@@ -92,12 +101,20 @@ def url_checks(id):
             except requests.RequestException:
                 flash('Произошла ошибка при проверке', 'error')
                 return redirect(url_for('url_id', id=id))
-            cur.execute('INSERT INTO url_checks (url_id, status_code, created_at) VALUES (%s, %s, %s)', (id, response.status_code, current_date,))
-            cur.execute('SELECT * FROM url_checks WHERE url_id=%s', (id,))
-
+            soup = BeautifulSoup(response.text, 'html.parser')
+            h1 = soup.find('h1').text if soup.find_all('h1') else ''
+            title = soup.find('title').text if soup.find_all('title') else ''
+            descr_search = soup.find('meta', {'name': 'description'})
+            description = descr_search.get('content') if descr_search else ''
+            cur.execute('''INSERT INTO url_checks
+                        (url_id, status_code, h1, title,
+                        description, created_at)
+                        VALUES (%s, %s, %s, %s, %s, %s)''',
+                        (id, response.status_code, h1, title,
+                         description, current_date,)
+                        )
     flash('Страница успешно проверена', 'success')
     return redirect(url_for('url_id', id=id))
-
 
 
 def validate(url):
@@ -112,4 +129,4 @@ def validate(url):
 
 
 if __name__ == '__main__':
- app.run(debug=True)
+    app.run(debug=True)
