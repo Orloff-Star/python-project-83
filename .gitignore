@@ -4,3 +4,4 @@ dist/
 .venv/
 dist
 page_analyzer/.env
+.env
