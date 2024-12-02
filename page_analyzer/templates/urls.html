@@ -21,12 +21,13 @@
                   <td> 
                     <a href="{{ url_for('get_page_url', url_id=url.id) }}"> {{ url.name }} </a>
                   </td>
-                  {% for url_check in url_checks %}
-                    {% if url_check.url_id == url.id %}
-                    <td>{{url_check.created_at}}</td>
-                    <td>{{url_check.status_code}}</td>
-                    {% endif %}
-                  {% endfor %}
+                  {% if url.id in url_checks %}
+                  <td> {{ url_checks[url.id].created_at }}</td>
+                  <td> {{ url_checks[url.id].status_code }}</td>
+                  {% else %}
+                  <td></td>
+                  <td></td>
+                  {% endif %}
                 </tr>
                 {% endfor %}       
               </tbody>      
