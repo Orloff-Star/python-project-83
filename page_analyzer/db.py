@@ -1,9 +1,9 @@
 import os
-import psycopg2
 from datetime import datetime
+
+import psycopg2
 from dotenv import load_dotenv
 from psycopg2.extras import NamedTupleCursor
-
 
 load_dotenv()
 DATABASE_URL = os.getenv('DATABASE_URL')

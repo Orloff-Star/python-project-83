@@ -1,11 +1,11 @@
 import logging
 import os
+
 import requests
 from dotenv import load_dotenv
-from flask import (Flask, render_template, request,
-                   flash, url_for, redirect, abort)
-from page_analyzer import db, functions
+from flask import Flask, abort, flash, redirect, render_template, request, url_for
 
+from page_analyzer import db, functions
 
 load_dotenv()
 app = Flask(__name__)
