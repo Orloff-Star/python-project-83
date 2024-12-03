@@ -1,4 +1,3 @@
-
 import logging
 import os
 
@@ -10,6 +9,7 @@ from flask import (Flask, abort, flash, redirect, render_template, request,
 from page_analyzer import db, functions
 
 load_dotenv()
+
 app = Flask(__name__)
 app.config["SECRET_KEY"] = os.getenv("SECRET_KEY")
 
