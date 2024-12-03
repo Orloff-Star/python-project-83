@@ -1,10 +1,10 @@
-from flask import (Flask, render_template, request,
-                   flash, url_for, redirect, abort)
-from dotenv import load_dotenv
+import logging
 import os
 import requests
+from dotenv import load_dotenv
+from flask import (Flask, render_template, request,
+                   flash, url_for, redirect, abort)
 from page_analyzer import db, functions
-import logging
 
 
 load_dotenv()

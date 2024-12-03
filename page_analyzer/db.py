@@ -1,8 +1,8 @@
-from datetime import datetime
-from psycopg2.extras import NamedTupleCursor
-from dotenv import load_dotenv
-import psycopg2
 import os
+import psycopg2
+from datetime import datetime
+from dotenv import load_dotenv
+from psycopg2.extras import NamedTupleCursor
 
 
 load_dotenv()
