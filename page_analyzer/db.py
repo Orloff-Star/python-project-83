@@ -49,8 +49,8 @@ def get_last_url_checks(conn):
                     FROM url_checks
                     GROUP BY url_id, status_code
                     ''')
-        cur.fetchall()
-        url_checks = {item.url_id: item for item in cur}
+        result = cur.fetchall()
+        url_checks = {item.url_id: item for item in result}
         return url_checks
 
 
